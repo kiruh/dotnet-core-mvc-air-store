@@ -1,0 +1,74 @@
+﻿@model IEnumerable<AirStore.Models.Air>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if ((bool)TempData["Success"])
+{
+    <div class="alert alert-success mt">You successfully bought an air.</div>
+}
+
+<h2>Select product</h2>
+<hr />
+
+@if ((bool)ViewData["IsAdmin"])
+{
+    <p>
+        <a asp-action="Create" class="btn btn-default">Create New</a>
+    </p>
+}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+            @if ((bool)ViewData["IsAdmin"])
+            {
+                <th></th>
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a asp-controller="Order" asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy</a>
+                </td>
+                @if ((bool)ViewData["IsAdmin"])
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a>
+                    </td>
+                }
+                @if ((bool)ViewData["IsAdmin"])
+                {
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@item.Id">
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

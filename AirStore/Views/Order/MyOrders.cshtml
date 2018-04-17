@@ -1,0 +1,69 @@
+﻿@model IEnumerable<AirStore.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+@if ((bool)TempData["Delivered"])
+{
+    <div class="alert alert-success mt">You successfully accepted air.</div>
+}
+
+<h2>My Orders</h2>
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Air.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Air.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Air.Price)
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air.Price)
+                </td>
+                <td>
+                    @if (!item.Shipped)
+                    {
+                        <p class="alert alert-warning">Pending</p>
+                    }
+                    else
+                    {
+                        if (item.Delivered)
+                        {
+                            <p class="alert alert-info">Accepted</p>
+                        }
+                        else
+                        {
+                            <form asp-action="Accept" asp-route-id="@item.Id">
+                                <div class="form-group">
+                                    <input type="submit" value="Accept" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

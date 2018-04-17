@@ -1,0 +1,96 @@
+﻿@model PaginatedList<AirStore.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@if ((bool)TempData["Shipped"])
+{
+    <div class="alert alert-success mt">You successfully shipped air.</div>
+}
+
+<h2>All Orders</h2>
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                User
+            </th>
+            <th>
+                Air
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air.Price)
+                </td>
+                <td>
+                    @if (!item.Shipped)
+                    {
+                        <form asp-action="Ship" asp-route-id="@item.Id">
+                            <div class="form-group">
+                                <input type="submit" value="Ship" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        if (item.Delivered)
+                        {
+                            <p class="alert alert-info">Delivered</p>
+                        }
+                        else
+                        {
+                            <p class="alert alert-warning">Delivering</p>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

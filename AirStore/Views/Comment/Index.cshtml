@@ -1,0 +1,42 @@
+﻿@model IEnumerable<AirStore.Models.Comment>
+
+@{
+    ViewData["Title"] = "Last 5 comments";
+}
+
+@if ((bool)TempData["Success"])
+{
+    <div class="alert alert-success mt">You successfully added a comment.</div>
+}
+
+<h2>Last 5 comments</h2>
+<hr />
+
+<div class="container">
+
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <div>
+                    <strong>@Html.DisplayFor(modelItem => item.User.FullName)</strong>
+                </div>
+                <div>
+                    <span>@Html.DisplayFor(modelItem => item.CreatedAt)</span>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="well well-lg">
+                    @Html.DisplayFor(modelItem => item.Text)
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Leave a comment</a>
+</p>
+<p>
+    <a asp-action="ViewAll">View all comments</a>
+</p>

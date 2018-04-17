@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using AirStore.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+    bool IsAdmin = User.IsInRole("Admin");
+    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="" asp-controller="Account" asp-action="Edit" title="Manage">Edit profile</a>
+            </li>
+            <li>
+                <a asp-area="" asp-controller="Order" asp-action="MyOrders" title="My Orders">My Orders</a>
+            </li>
+            @if (IsAdmin)
+            {
+                <li>
+                    <a asp-area="" asp-controller="Order" asp-action="Index" title="All Orders">All Orders</a>
+                </li>
+            }
+        </ul>
+    </form>
+}
+
